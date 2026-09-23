@@ -267,7 +267,7 @@ Setelah dijalankan, program akan menampilkan data perumahan, rumah, pemilik, pen
 ## Struktur File
 
 ```text
-rae-perumahan/
+posttest/posttest_1/main.py/
 │
 ├── main.py
 │
