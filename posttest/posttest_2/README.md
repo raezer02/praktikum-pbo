@@ -1,12 +1,4 @@
 # Posttest Pemrograman Berorientasi Objek — Rae Perumahan
-
-| | |
-|---|---|
-| **Nama** | _(isi nama Anda)_ |
-| **NIM** | _(isi NIM Anda)_ |
-| **Kelas** | _(isi kelas Anda)_ |
-| **Judul Proyek** | Sistem Rae Perumahan |
-
 ---
 
 ## 1. Deskripsi Program
