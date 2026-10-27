@@ -18,7 +18,7 @@
 
 ## 3. Class Diagram
 
-![Class Diagram Rae Perumahan](UML.drawio.png)
+![Class Diagram Rae Perumahan](/screenshots/abstraksi.png)
 
 Diagram menggunakan Mermaid agar dapat dirender langsung di GitHub pada `README.md`.
 
@@ -243,7 +243,7 @@ Ruangan masih ada                   : False
 Ambil screenshot terminal asli setelah menjalankan `python main.py`, lalu simpan di folder `screenshots/` dan tambahkan ke README dengan format berikut:
 
 ```markdown
-![Bukti abstraksi](screenshots/abstraksi.png)
+![Bukti abstraksi](/screenshots/image.png)
 ![Bukti polimorfisme](screenshots/polimorfisme.png)
 ![Bukti duck typing dan operator overloading](screenshots/duck-typing-operator.png)
 ```
