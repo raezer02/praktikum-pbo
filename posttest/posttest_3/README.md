@@ -18,6 +18,8 @@
 
 ## 3. Class Diagram
 
+![Class Diagram Rae Perumahan](UML.drawio.png)
+
 Diagram menggunakan Mermaid agar dapat dirender langsung di GitHub pada `README.md`.
 
 ```mermaid
