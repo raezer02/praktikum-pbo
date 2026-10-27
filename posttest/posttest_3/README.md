@@ -18,7 +18,7 @@
 
 ## 3. Class Diagram
 
-![Class Diagram Rae Perumahan](/screenshots/abstraksi.png)
+![Class Diagram Rae Perumahan](screenshots/uml.png)
 
 Diagram menggunakan Mermaid agar dapat dirender langsung di GitHub pada `README.md`.
 
@@ -240,15 +240,11 @@ Ruangan masih ada                   : False
 
 ### Screenshot yang perlu dimasukkan
 
-Ambil screenshot terminal asli setelah menjalankan `python main.py`, lalu simpan di folder `screenshots/` dan tambahkan ke README dengan format berikut:
+![Bukti abstraksi](screenshots/abstraksi.png)
 
-```markdown
-![Bukti abstraksi](/screenshots/image.png)
 ![Bukti polimorfisme](screenshots/polimorfisme.png)
-![Bukti duck typing dan operator overloading](screenshots/duck-typing-operator.png)
-```
 
-Screenshot harus memperlihatkan hasil eksekusi program yang sebenarnya, terutama `TypeError` saat `Properti` dicoba untuk dibuat menjadi objek.
+![Bukti duck typing dan operator overloading](screenshots/duck-typing-operator.png)
 
 ## 10. Cara Menjalankan
 
