@@ -1,0 +1,272 @@
+
+RAE PERUMAHAN
+--------------------------------------------------
+
+OBJEK PERUMAHAN
+--------------------------------------------------
+Kode Perumahan : P01
+Nama Perumahan : Rae Harmoni
+Lokasi         : Jl. Harmoni
+Jumlah Rumah   : 0
+
+Kode Perumahan : P02
+Nama Perumahan : Rae Sejahtera
+Lokasi         : Jl. Harmoni
+Jumlah Rumah   : 0
+
+STATIC METHOD PERUMAHAN
+--------------------------------------------------
+Validasi kode P01: True
+Validasi kode A: False
+
+CLASS METHOD PERUMAHAN
+--------------------------------------------------
+Lokasi berhasil diubah.
+Lokasi sekarang : Jl. Harmoni Baru
+
+OBJEK RUMAH
+--------------------------------------------------
+Kode Rumah : R01
+Tipe       : 36
+Harga      : Rp250,000,000
+Status     : Kosong
+Pemilik    : -
+
+Kode Rumah : R02
+Tipe       : 45
+Harga      : Rp350,000,000
+Status     : Kosong
+Pemilik    : -
+
+STATIC METHOD RUMAH
+--------------------------------------------------
+Validasi harga 250000000: True
+Validasi harga -1000: False
+
+CLASS METHOD RUMAH
+--------------------------------------------------
+Kode Rumah : R03
+Tipe       : 50
+Harga      : Rp450,000,000
+Status     : Kosong
+Pemilik    : -
+
+GETTER & SETTER RUMAH
+--------------------------------------------------
+Harga rumah1 : 250000000
+
+Setter dengan data valid:
+Harga berhasil diubah.
+Harga baru   : 300000000
+
+Setter dengan data tidak valid:
+Harga harus lebih dari 0!
+
+Status awal   : Kosong
+
+Setter status valid:
+Status berhasil diubah.
+Status baru   : Terisi
+
+Setter status tidak valid:
+Status hanya boleh 'Kosong' atau 'Terisi'!
+
+OBJEK PEMILIK
+--------------------------------------------------
+ID Pemilik : PM01
+Nama       : Rae
+No. HP     : 081234567890
+Rumah      : -
+
+ID Pemilik : PM02
+Nama       : Budi
+No. HP     : 082345678901
+Rumah      : -
+
+STATIC METHOD PEMILIK
+--------------------------------------------------
+Validasi nama Rae: True
+Validasi nama kosong: False
+
+GETTER & SETTER PEMILIK
+--------------------------------------------------
+No. HP pemilik1 : 081234567890
+
+Setter dengan data valid:
+No. HP berhasil diubah.
+No. HP baru     : 089876543210
+
+Setter dengan data tidak valid:
+No. HP tidak boleh kosong!
+
+==================================================
+INHERITANCE
+==================================================
+
+OBJEK SUBCLASS: RUMAH SUBSIDI
+--------------------------------------------------
+Kode Rumah : R04
+Tipe       : 36
+Harga      : Rp200,000,000
+Status     : Kosong
+Pemilik    : -
+Jenis      : Rumah Subsidi
+Subsidi    : Rp25,000,000
+Harga Akhir: Rp175,000,000
+
+OBJEK SUBCLASS: RUMAH KOMERSIAL
+--------------------------------------------------
+Kode Rumah : R05
+Tipe       : 72
+Harga      : Rp600,000,000
+Status     : Kosong
+Pemilik    : -
+Jenis      : Rumah Komersial
+Fasilitas  : Kolam Renang, Smart Home
+Biaya Fasil: Rp50,000,000
+Harga Akhir: Rp650,000,000
+
+OBJEK SUBCLASS (CLASS METHOD buat_rumah DIWARISI)
+--------------------------------------------------
+Tipe objek       : RumahSubsidi
+Harga akhir R06  : Rp160,000,000
+
+METHOD OVERRIDING (POLIMORFISME)
+--------------------------------------------------
+R01 (Rumah Umum     ) -> Harga akhir: Rp300,000,000
+R04 (Rumah Subsidi  ) -> Harga akhir: Rp175,000,000
+R05 (Rumah Komersial) -> Harga akhir: Rp650,000,000
+
+PENGECEKAN HUBUNGAN INHERITANCE
+--------------------------------------------------
+RumahSubsidi turunan Rumah   : True
+RumahKomersial turunan Rumah : True
+rumah_subsidi isinstance Rumah: True
+MRO RumahSubsidi : ['RumahSubsidi', 'Rumah', 'Properti', 'ABC', 'object']
+
+ATRIBUT PROTECTED & PRIVATE
+--------------------------------------------------
+Protected _harga (akses langsung) : 200000000
+Margin via method (data private)  : Rp40,000,000
+Akses langsung __harga_modal ditolak -> 'RumahSubsidi' object has no attribute '__harga_modal'
+
+Setelah tambah fasilitas di subclass:
+Harga akhir R05 : Rp665,000,000
+
+==================================================
+RELASI UML
+==================================================
+
+AGREGASI: PERUMAHAN o-- RUMAH
+--------------------------------------------------
+Rumah R01 masuk ke Rae Harmoni.
+Rumah R02 masuk ke Rae Harmoni.
+Rumah R03 masuk ke Rae Harmoni.
+Rumah R04 masuk ke Rae Harmoni.
+Rumah R05 masuk ke Rae Harmoni.
+
+Daftar rumah di Rae Harmoni:
+  - R01 | Tipe 36 | Terisi
+  - R02 | Tipe 45 | Kosong
+  - R03 | Tipe 50 | Kosong
+  - R04 | Tipe 36 | Kosong
+  - R05 | Tipe 72 | Kosong
+
+Rumah R03 dikeluarkan dari perumahan:
+Rumah R03 dikeluarkan dari Rae Harmoni.
+Daftar rumah di Rae Harmoni:
+  - R01 | Tipe 36 | Terisi
+  - R02 | Tipe 45 | Kosong
+  - R04 | Tipe 36 | Kosong
+  - R05 | Tipe 72 | Kosong
+
+Objek rumah R03 masih ada setelah dikeluarkan:
+Kode : R03 | Tipe : 50
+Rumah R03 masih bisa dimasukkan ke perumahan lain:
+Rumah R03 masuk ke Rae Sejahtera.
+
+ASOSIASI: PEMILIK -- RUMAH
+--------------------------------------------------
+Status berhasil diubah.
+Rae berhasil membeli rumah R02.
+Status berhasil diubah.
+Rae berhasil membeli rumah R04.
+Rumah R02 tidak tersedia untuk dibeli!
+Status berhasil diubah.
+Budi berhasil membeli rumah R05.
+
+ID Pemilik : PM01
+Nama       : Rae
+No. HP     : 089876543210
+Rumah      : R02, R04
+
+ID Pemilik : PM02
+Nama       : Budi
+No. HP     : 082345678901
+Rumah      : R05
+
+Dari sisi Rumah (asosiasi dua arah):
+Pemilik rumah R02 : Rae
+Pemilik rumah R05 : Budi
+
+KOMPOSISI: RUMAH *-- RUANGAN
+--------------------------------------------------
+Kode Rumah : R05
+Tipe       : 72
+Harga      : Rp600,000,000
+Status     : Terisi
+Pemilik    : Budi
+Ruangan    :
+  - Ruang Tamu (20 m2)
+  - Kamar Tidur (15 m2)
+  - Dapur (10 m2)
+Jenis      : Rumah Komersial
+Fasilitas  : Kolam Renang, Smart Home, Taman Pribadi
+Biaya Fasil: Rp65,000,000
+Harga Akhir: Rp665,000,000
+
+Total luas ruangan R05 : 45 m2
+Total objek Ruangan    : 3
+
+Rumah sementara dibuat lalu dihapus:
+Total objek Ruangan sebelum dihapus : 4
+Ruangan masih ada                   : True
+Total objek Ruangan setelah dihapus : 3
+Ruangan masih ada                   : False
+
+TOTAL DATA
+--------------------------------------------------
+Total rumah   : 7
+Total pemilik : 2
+
+==================================================
+ABSTRAKSI (ABSTRACT BASE CLASS)
+==================================================
+Properti tidak dapat dibuat menjadi objek:
+TypeError: Can't instantiate abstract class Properti without an implementation for abstract methods 'deskripsi_jenis', 'hitung_harga_akhir'
+
+Method konkret dari abstract class dipakai oleh objek subclass:
+R01 | Rumah Umum | Harga akhir: Rp300,000,000
+R04 | Rumah Subsidi | Harga akhir: Rp175,000,000
+R05 | Rumah Komersial | Harga akhir: Rp665,000,000
+
+==================================================
+DUCK TYPING
+==================================================
+Informasi objek Perumahan:
+Kode Perumahan : P01
+Nama Perumahan : Rae Harmoni
+Lokasi         : Jl. Harmoni Baru
+Jumlah Rumah   : 4
+
+Informasi objek Pemilik:
+ID Pemilik : PM01
+Nama       : Rae
+No. HP     : 089876543210
+Rumah      : R02, R04
+
+==================================================
+OPERATOR OVERLOADING
+==================================================
+Representasi string rumah1: R01 - Tipe 36 - Rp300,000,000
+Apakah rumah1 lebih murah daripada rumah_komersial? True

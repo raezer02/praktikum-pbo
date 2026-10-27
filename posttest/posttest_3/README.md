@@ -2,11 +2,23 @@
 
 ## 1. Deskripsi Program
 
-**Rae Perumahan** adalah program Python sederhana untuk mengelola data perumahan, rumah, pemilik, ruangan, dan jenis rumah. Posttest ini meneruskan konsep OOP sebelumnya dan menambahkan abstraksi, polimorfisme, serta operator overloading.
+**Rae Perumahan** adalah program Python sederhana untuk mengelola data perumahan, rumah, jenis rumah, ruangan, dan pemilik rumah. Program ini melanjutkan posttest sebelumnya, lalu menambahkan **abstraksi, polimorfisme, duck typing, dan operator overloading**.
 
-## 2. Class Diagram
+## 2. Daftar Kelas
 
-Diagram dibuat menggunakan Mermaid agar bisa ditampilkan langsung di README GitHub.
+| Kelas | Peran |
+|---|---|
+| `Properti` | Abstract base class yang menetapkan perilaku umum properti |
+| `Perumahan` | Menampung daftar rumah; berelasi agregasi dengan `Rumah` |
+| `Rumah` | Subclass konkret dari `Properti`; berisi data umum rumah |
+| `RumahSubsidi` | Subclass `Rumah` yang menghitung potongan subsidi |
+| `RumahKomersial` | Subclass `Rumah` yang menghitung biaya fasilitas tambahan |
+| `Pemilik` | Mewakili orang yang membeli rumah; berasosiasi dengan `Rumah` |
+| `Ruangan` | Bagian dari rumah; dibuat dan dikelola oleh `Rumah` |
+
+## 3. Class Diagram
+
+Diagram menggunakan Mermaid agar dapat dirender langsung di GitHub pada `README.md`.
 
 ```mermaid
 classDiagram
@@ -18,45 +30,53 @@ classDiagram
         +tampilkan_ringkasan()
     }
 
+    class Perumahan {
+        +kode
+        +nama
+        +daftar_rumah
+        +tambah_rumah(rumah)
+        +hapus_rumah(kode_rumah)
+        +tampilkan_info()
+    }
+
     class Rumah {
         +kode_rumah
         +tipe
+        +pemilik
         #_harga
         #_status
-        +tambah_ruangan()
+        -__harga_modal
+        -__daftar_ruangan
+        +tampilkan_info()
         +hitung_harga_akhir()
         +deskripsi_jenis()
+        +tambah_ruangan(nama, luas)
         +__str__()
-        +__lt__()
+        +__lt__(rumah_lain)
     }
 
     class RumahSubsidi {
         +subsidi_pemerintah
         +hitung_harga_akhir()
         +deskripsi_jenis()
+        +tampilkan_info()
     }
 
     class RumahKomersial {
         +fasilitas
         +biaya_fasilitas
+        +tambah_fasilitas(nama, biaya)
         +hitung_harga_akhir()
         +deskripsi_jenis()
-    }
-
-    class Perumahan {
-        +kode
-        +nama
-        +daftar_rumah
-        +tambah_rumah()
-        +hapus_rumah()
         +tampilkan_info()
     }
 
     class Pemilik {
         +id_pemilik
         +nama
-        +no_hp
-        +beli_rumah()
+        -__no_hp
+        +daftar_rumah
+        +beli_rumah(rumah)
         +tampilkan_info()
     }
 
@@ -66,70 +86,178 @@ classDiagram
         +tampilkan_info()
     }
 
-    Properti <|-- Rumah
-    Rumah <|-- RumahSubsidi
-    Rumah <|-- RumahKomersial
+    Properti <|-- Rumah : inheritance
+    Rumah <|-- RumahSubsidi : inheritance
+    Rumah <|-- RumahKomersial : inheritance
     Perumahan o-- Rumah : agregasi
-    Pemilik --> Rumah : asosiasi / memiliki
+    Pemilik "1" -- "0..*" Rumah : asosiasi
     Rumah *-- Ruangan : komposisi
 ```
 
-### Penjelasan relasi
+Keterangan visibilitas: `+` public, `#` protected, `-` private. Tanda `*` pada method abstrak menandakan method wajib diimplementasikan.
 
-- **Asosiasi — `Pemilik` dan `Rumah`:** `Pemilik.beli_rumah()` menghubungkan pemilik dengan rumah melalui atribut `rumah.pemilik`. Objek pemilik dan rumah dibuat secara terpisah.
-- **Agregasi — `Perumahan` dan `Rumah`:** `Perumahan.tambah_rumah()` menerima objek rumah yang sudah dibuat dari luar. Rumah dapat dikeluarkan dari daftar perumahan tanpa menghapus objek rumah itu sendiri.
-- **Komposisi — `Rumah` dan `Ruangan`:** `Rumah.tambah_ruangan()` membuat objek `Ruangan` lalu menyimpannya pada daftar privat rumah. Dalam model program ini, ruangan dikelola sebagai bagian dari rumah.
-- **Inheritance — `Properti`, `Rumah`, `RumahSubsidi`, dan `RumahKomersial`:** `Rumah` mewarisi abstract class `Properti`, lalu kedua jenis rumah mewarisi `Rumah` dan meng-override perilaku perhitungan harga serta deskripsi jenis.
+## 4. Penerapan Relasi UML
 
-## 3. Abstraksi
+### 4.1 Asosiasi — `Pemilik` dan `Rumah`
 
-`Properti` adalah abstract base class yang menggunakan `ABC` dan dua `@abstractmethod`, yaitu `hitung_harga_akhir()` dan `deskripsi_jenis()`. Method konkret `tampilkan_ringkasan()` juga tersedia agar bisa dipakai bersama oleh objek turunannya.
+Objek `Pemilik` dan `Rumah` dibuat secara terpisah. Ketika `Pemilik.beli_rumah(rumah)` berhasil, `Rumah.pemilik` menyimpan referensi pemilik dan `Pemilik.daftar_rumah` menyimpan rumah yang dibeli. Keduanya tetap merupakan objek mandiri.
 
-`Rumah`, `RumahSubsidi`, dan `RumahKomersial` menyediakan implementasi method abstrak. Subclass `RumahSubsidi` menghitung harga setelah subsidi, sedangkan `RumahKomersial` menghitung harga setelah biaya fasilitas.
+### 4.2 Agregasi — `Perumahan` dan `Rumah`
 
-Program mencoba membuat objek `Properti` secara langsung menggunakan `try-except TypeError`. Pembuatan objek tersebut ditolak karena abstract method belum diimplementasikan.
+Objek `Rumah` dibuat di luar kelas `Perumahan`, lalu dimasukkan melalui `tambah_rumah()`. Ketika rumah dikeluarkan dengan `hapus_rumah()`, objek rumah tetap ada dan dapat dimasukkan ke perumahan lain.
 
-## 4. Polimorfisme
+### 4.3 Komposisi — `Rumah` dan `Ruangan`
 
-### Polimorfisme melalui pewarisan
+Objek `Ruangan` dibuat di dalam method `Rumah.tambah_ruangan()` dan disimpan dalam atribut private `__daftar_ruangan`. Dalam model program ini, daftar ruangan dikelola oleh rumah; ketika rumah sementara dihapus dan tidak ada referensi lain ke ruangannya, objek ruangan dapat dibersihkan oleh Python.
 
-Method `hitung_harga_akhir()` di-override pada `RumahSubsidi` dan `RumahKomersial`. Program memanggil method yang sama melalui satu loop berisi objek `Rumah`, `RumahSubsidi`, dan `RumahKomersial`, sehingga setiap objek menentukan hasilnya sendiri. Method `deskripsi_jenis()` juga memberikan deskripsi sesuai objek tanpa rantai `if/elif` untuk memeriksa tipe.
+## 5. Abstraksi
 
-### Duck typing
+`Properti` menggunakan `ABC` dan memiliki dua `@abstractmethod`, yaitu `hitung_harga_akhir()` dan `deskripsi_jenis()`. Method konkret `tampilkan_ringkasan()` digunakan bersama oleh objek turunannya. `Rumah` menyediakan implementasi umum, sedangkan `RumahSubsidi` dan `RumahKomersial` mengubah perilaku perhitungan harga dan deskripsi jenis.
 
-Fungsi `tampilkan_informasi(objek)` memanggil `tampilkan_info()`. Fungsi yang sama digunakan untuk objek `Perumahan` dan `Pemilik`, meskipun kedua kelas tidak saling mewarisi. Fungsi hanya membutuhkan objek yang menyediakan method tersebut.
+Program juga mencoba membuat objek `Properti` secara langsung menggunakan `try-except TypeError`. Pembuatan objek ditolak karena abstract method belum diimplementasikan.
 
-### Operator overloading
+## 6. Polimorfisme
 
-Kelas `Rumah` mengimplementasikan:
-- `__str__()` agar objek rumah dapat ditampilkan dengan `str(rumah)`.
-- `__lt__()` agar dua objek rumah dapat dibandingkan dengan operator `<` berdasarkan harga akhir.
+### 6.1 Polimorfisme melalui pewarisan
 
-## 5. Inheritance dan Enkapsulasi
+Method `hitung_harga_akhir()` di-override oleh `RumahSubsidi` dan `RumahKomersial`. Method yang sama dipanggil melalui satu loop berisi objek `Rumah`, `RumahSubsidi`, dan `RumahKomersial`. Setiap objek memberikan hasil sesuai perilakunya sendiri, tanpa rantai `if/elif` untuk menentukan jenis rumah.
 
-`RumahSubsidi` dan `RumahKomersial` memanggil `super().__init__(...)` untuk menggunakan konstruktor superclass. Keduanya memiliki atribut unik. Atribut `_harga` dan `_status` bersifat protected berdasarkan konvensi Python, sedangkan `__harga_modal` dan `__daftar_ruangan` menggunakan name mangling untuk membatasi akses langsung.
+### 6.2 Duck typing
 
-## 6. Prinsip SOLID (Nilai Plus)
+Fungsi `tampilkan_informasi(objek)` memanggil method `tampilkan_info()`. Fungsi yang sama digunakan untuk objek `Perumahan` dan `Pemilik`. Kedua kelas tidak saling mewarisi, tetapi keduanya memiliki method dengan nama yang sama.
 
-**Open/Closed Principle (OCP), secara sederhana:** perhitungan harga dapat diperluas dengan menambahkan subclass baru dari `Rumah` yang meng-override `hitung_harga_akhir()` dan `deskripsi_jenis()`. Loop pemanggilan harga tidak perlu memeriksa jenis objek dengan `if/elif`; setiap subclass menyediakan perilakunya sendiri.
+### 6.3 Operator overloading
 
-## 7. Cara Menjalankan
+- `Rumah.__str__()` mengatur tampilan objek saat dipanggil dengan `str(rumah)`.
+- `Rumah.__lt__()` memungkinkan dua objek rumah dibandingkan menggunakan operator `<` berdasarkan harga akhir.
 
-Pastikan Python 3 sudah terpasang, lalu jalankan dari folder project:
+## 7. Inheritance dan Enkapsulasi
+
+`RumahSubsidi` dan `RumahKomersial` memanggil `super().__init__(...)` untuk menggunakan konstruktor kelas induk. Atribut khusus `RumahSubsidi` adalah `subsidi_pemerintah`, sedangkan `RumahKomersial` memiliki `fasilitas` dan `biaya_fasilitas`.
+
+Atribut `_harga` dan `_status` menggunakan konvensi protected Python. Atribut `__harga_modal` dan `__daftar_ruangan` menggunakan name mangling untuk membatasi akses langsung.
+
+## 8. Prinsip SOLID (Nilai Plus)
+
+**Open/Closed Principle (OCP):** jenis rumah baru dapat ditambahkan sebagai subclass `Rumah` dengan mengimplementasikan perilaku harga dan deskripsi yang sesuai. Loop polimorfisme tidak perlu diubah menjadi rangkaian pemeriksaan tipe.
+
+## 9. Hasil Output Program
+
+Output berikut berasal dari eksekusi `python main.py`. Bagian ini menjadi referensi hasil program; untuk memenuhi ketentuan screenshot, jalankan program di terminal komputer sendiri dan ambil screenshot dari bagian-bagian berikut.
+
+<details>
+<summary><b>Abstraksi dan method konkret</b></summary>
+
+```text
+ABSTRAKSI (ABSTRACT BASE CLASS)
+==================================================
+Properti tidak dapat dibuat menjadi objek:
+TypeError: Can't instantiate abstract class Properti without an implementation for abstract methods 'deskripsi_jenis', 'hitung_harga_akhir'
+
+Method konkret dari abstract class dipakai oleh objek subclass:
+R01 | Rumah Umum | Harga akhir: Rp300,000,000
+R04 | Rumah Subsidi | Harga akhir: Rp175,000,000
+R05 | Rumah Komersial | Harga akhir: Rp665,000,000
+```
+
+</details>
+
+<details>
+<summary><b>Polimorfisme melalui pewarisan</b></summary>
+
+```text
+METHOD OVERRIDING (POLIMORFISME)
+--------------------------------------------------
+R01 (Rumah Umum     ) -> Harga akhir: Rp300,000,000
+R04 (Rumah Subsidi  ) -> Harga akhir: Rp175,000,000
+R05 (Rumah Komersial) -> Harga akhir: Rp665,000,000
+```
+
+</details>
+
+<details>
+<summary><b>Duck typing</b></summary>
+
+```text
+DUCK TYPING
+==================================================
+Informasi objek Perumahan:
+Kode Perumahan : P01
+Nama Perumahan : Rae Harmoni
+Lokasi         : Jl. Harmoni Baru
+Jumlah Rumah   : 4
+
+Informasi objek Pemilik:
+ID Pemilik : PM01
+Nama       : Rae
+No. HP     : 089876543210
+Rumah      : R02, R04
+```
+
+</details>
+
+<details>
+<summary><b>Operator overloading</b></summary>
+
+```text
+OPERATOR OVERLOADING
+==================================================
+Representasi string rumah1: R01 - Tipe 36 - Rp300,000,000
+Apakah rumah1 lebih murah daripada rumah_komersial? True
+```
+
+</details>
+
+<details>
+<summary><b>Relasi UML — agregasi, asosiasi, dan komposisi</b></summary>
+
+```text
+AGREGASI: PERUMAHAN o-- RUMAH
+Rumah R03 dikeluarkan dari Rae Harmoni.
+Objek rumah R03 masih ada setelah dikeluarkan:
+Kode : R03 | Tipe : 50
+Rumah R03 masih bisa dimasukkan ke perumahan lain:
+Rumah R03 masuk ke Rae Sejahtera.
+
+ASOSIASI: PEMILIK -- RUMAH
+Rae berhasil membeli rumah R02.
+Rae berhasil membeli rumah R04.
+Rumah R02 tidak tersedia untuk dibeli!
+Budi berhasil membeli rumah R05.
+
+KOMPOSISI: RUMAH *-- RUANGAN
+Total luas ruangan R05 : 45 m2
+Total objek Ruangan    : 3
+Total objek Ruangan sebelum dihapus : 4
+Ruangan masih ada                   : True
+Total objek Ruangan setelah dihapus : 3
+Ruangan masih ada                   : False
+```
+
+</details>
+
+### Screenshot yang perlu dimasukkan
+
+Ambil screenshot terminal asli setelah menjalankan `python main.py`, lalu simpan di folder `screenshots/` dan tambahkan ke README dengan format berikut:
+
+```markdown
+![Bukti abstraksi](screenshots/abstraksi.png)
+![Bukti polimorfisme](screenshots/polimorfisme.png)
+![Bukti duck typing dan operator overloading](screenshots/duck-typing-operator.png)
+```
+
+Screenshot harus memperlihatkan hasil eksekusi program yang sebenarnya, terutama `TypeError` saat `Properti` dicoba untuk dibuat menjadi objek.
+
+## 10. Cara Menjalankan
+
+Pastikan Python 3 terpasang, lalu jalankan dari folder project:
 
 ```bash
 python main.py
 ```
 
-Program menggunakan modul bawaan Python (`abc`, `gc`, dan `weakref`).
+Program hanya menggunakan modul bawaan Python: `abc`, `gc`, dan `weakref`.
 
-## 8. Bukti Output
+## 11. Kesimpulan
 
-Jalankan `main.py`, lalu ambil screenshot terminal yang menunjukkan:
-1. Bagian `ABSTRAKSI`, khususnya pesan `TypeError` saat `Properti` dicoba untuk dibuat menjadi objek.
-2. Ringkasan harga dari objek `Rumah`, `RumahSubsidi`, dan `RumahKomersial`.
-3. Bagian `DUCK TYPING`.
-4. Bagian `OPERATOR OVERLOADING`.
-5. Diagram Mermaid di bagian Class Diagram pada README.
-
-**Catatan:** screenshot output harus diambil dari hasil menjalankan program yang sebenarnya. Mermaid akan dirender otomatis pada platform yang mendukungnya, termasuk GitHub.
+Program Rae Perumahan mempertahankan relasi asosiasi, agregasi, dan komposisi serta inheritance dari posttest sebelumnya. Posttest lanjutan menambahkan abstract class, method overriding, duck typing, dan operator overloading. Method yang sama dapat menghasilkan perilaku berbeda sesuai objek yang menjalankannya.
